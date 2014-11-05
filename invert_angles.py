@@ -14,14 +14,21 @@ sin = np.sin
 exp = np.exp
 pi = np.pi
 
-def prob_dens_q(qs, epsilon):
+def map_qpm_to_sphere(qs, epsilon):
+    """Takes values for qp and qm and maps them to the surface of the bloch
+    sphere.
+
+    """
     cos_theta = 2/(cosh(2*epsilon*qs[0]) + cosh(2*epsilon*qs[1]))
     phi = atan2(sinh(epsilon*(qs[0] - qs[1])),
                 (sinh(2*epsilon*qs[0]) + sinh(2*epsilon*qs[1]))/2)
     return np.array([cos_theta, phi])
 
 # angles = np.array([cos(Theta), Phi])
-def guess_q_vals(angles, epsilon):
+def guess_qpm_vals(angles, epsilon):
+    """Generates an initial guess of qp and qm for the rootfinder.
+
+    """
     return np.where(angles[0] == 1, np.zeros(angles.shape),
                     np.array([
                     cos(pi/4 - angles[1])*arccosh(2/angles[0] - 1)/(2*epsilon),
@@ -29,7 +36,11 @@ def guess_q_vals(angles, epsilon):
                     ]))
 
 # angles = np.array([cos(Theta), Phi])
-def array_get_q_vals(angles, epsilon):
+def array_get_qpm_vals(angles, epsilon):
+    """Takes points on the upper hemisphere of the bloch sphere and maps them to
+    points on the qp qm plane.
+
+    """
     costheta = np.array(angles[0])
     phi = np.array(angles[1])
     # Put phi in the range [-pi/2, 3pi/2).
@@ -49,9 +60,9 @@ def array_get_q_vals(angles, epsilon):
                 inverted[:,m,n] = np.array([0, 0])
             else:
                 try:
-                    sol = root(lambda qs: prob_dens_q(qs, epsilon) -
+                    sol = root(lambda qs: map_qpm_to_sphere(qs, epsilon) -
                                 np.array([costheta[m,n], phi[m,n]]),
-                                guess_q_vals(np.array([costheta[m,n],
+                                guess_qpm_vals(np.array([costheta[m,n],
                                 phi[m,n]]), epsilon))
                     inverted[:,m,n] = sign[m,n]*sol.x
                 except Exception as e:
@@ -66,12 +77,19 @@ def array_get_q_vals(angles, epsilon):
 #                                  guess_q_vals(angles, epsilon),
 #                                  f_tol=1e-14))
 
-def G(qp, qm, epsilon):
+def G_qpm(qp, qm, epsilon):
+    """The probability density function on the qp qm plane.
+
+    """
     return (epsilon/(4*pi)*exp(-epsilon*(qp**2 + qm**2 + 1))*
             (cosh(2*epsilon*qp) + cosh(2*epsilon*qm)))
 
-def G_tilde(angles, epsilon):
-    qp, qm = array_get_q_vals(angles, epsilon)
+def G_angles(angles, epsilon):
+    """The probability density function on the upper hemisphere of the bloch
+    sphere.
+
+    """
+    qp, qm = array_get_qpm_vals(angles, epsilon)
     s_pp = sinh(2*epsilon*qp)
     s_pm = sinh(epsilon*(qp + qm))
     s_mp = sinh(epsilon*(qp - qm))
@@ -83,12 +101,9 @@ def G_tilde(angles, epsilon):
                           2*(s_pp - s_mm)*s_mp*c_pp) /
                           ((c_pp + c_mm)**2*(4*s_pm**2 + s_mp**2 +
                                              s_pp**2 + s_mm**2)))
-    return G(qp, qm, epsilon)/parallelogram_area
+    return G_qpm(qp, qm, epsilon)/parallelogram_area
 
-def vec_fn(vec):
-    return np.array([vec[0] + vec[1], vec[0] - vec[1]])
-
-N = 128
+N = 16
 Theta, Phi = np.mgrid[0:pi/2:complex(0, N), 0:2*pi:complex(0, 2*N + 1)]
 # Theta should be in the open interval (0, pi/2)
 Theta = Theta[1:-1,:]
@@ -103,6 +118,6 @@ epsilon = 1
 pairs = np.dstack((cos(Theta), Phi))
 angles = np.array([cos(Theta), Phi])
 
-colorfunction=G_tilde(angles, epsilon)
+colorfunction=G_angles(angles, epsilon)
 
 norm = colors.Normalize()
