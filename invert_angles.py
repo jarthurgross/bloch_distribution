@@ -1,18 +1,13 @@
 #!/usr/bin/python3
 from scipy.optimize import root
 import numpy as np
+from numpy import cosh, arccosh, sinh, arctan2, cos, sin, exp, pi
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors
 from mpl_toolkits.mplot3d import Axes3D
 
-cosh = np.cosh
-arccosh = np.arccosh
-sinh = np.sinh
-atan2 = np.arctan2
-cos = np.cos
-sin = np.sin
-exp = np.exp
-pi = np.pi
+atan2 = arctan2
+
 
 def map_qpm_to_sphere(qs, epsilon):
     """Takes values for qp and qm and maps them to the surface of the bloch
@@ -24,6 +19,7 @@ def map_qpm_to_sphere(qs, epsilon):
                 (sinh(2*epsilon*qs[0]) + sinh(2*epsilon*qs[1]))/2)
     return np.array([cos_theta, phi])
 
+
 # angles = np.array([cos(Theta), Phi])
 def guess_qpm_vals(angles, epsilon):
     """Generates an initial guess of qp and qm for the rootfinder.
@@ -34,6 +30,7 @@ def guess_qpm_vals(angles, epsilon):
                     cos(pi/4 - angles[1])*arccosh(2/angles[0] - 1)/(2*epsilon),
                     sin(pi/4 - angles[1])*arccosh(2/angles[0] - 1)/(2*epsilon)
                     ]))
+
 
 # angles = np.array([cos(Theta), Phi])
 def array_get_qpm_vals(angles, epsilon):
@@ -72,17 +69,24 @@ def array_get_qpm_vals(angles, epsilon):
 
     return inverted
                 
-#    return np.where(angles[0] == 1, np.zeros(np.array(angles).shape),
-#                   sign*broyden1(lambda qs: prob_dens_q(qs, epsilon) - angles,
-#                                  guess_q_vals(angles, epsilon),
-#                                  f_tol=1e-14))
 
 def G_qpm(qp, qm, epsilon):
-    """The probability density function on the qp qm plane.
+    """The probability density function on the qp qm plane. (might be improperly
+    normalized)
 
     """
     return (epsilon/(4*pi)*exp(-epsilon*(qp**2 + qm**2 + 1))*
             (cosh(2*epsilon*qp) + cosh(2*epsilon*qm)))
+
+
+def G_q12(q1, q2, epsilon):
+    """The probability density function on the q1 q2 plane. (might be improperly
+    normalized)
+
+    """
+    return (epsilon/(4*pi)*exp(-epsilon*(q1**2 + q2**2 + 2)/2)*(cosh(epsilon*(q1
+        + q2)) + cosh(epsilon*(q1 - q2))))
+
 
 def G_angles(angles, epsilon):
     """The probability density function on the upper hemisphere of the bloch
