@@ -102,22 +102,3 @@ def G_angles(angles, epsilon):
                           ((c_pp + c_mm)**2*(4*s_pm**2 + s_mp**2 +
                                              s_pp**2 + s_mm**2)))
     return G_qpm(qp, qm, epsilon)/parallelogram_area
-
-N = 16
-Theta, Phi = np.mgrid[0:pi/2:complex(0, N), 0:2*pi:complex(0, 2*N + 1)]
-# Theta should be in the open interval (0, pi/2)
-Theta = Theta[1:-1,:]
-Phi = Phi[1:-1,:]
-
-X = sin(Theta) * cos(Phi)
-Y = sin(Theta) * sin(Phi)
-Z = cos(Theta)
-
-epsilon = 1
-
-pairs = np.dstack((cos(Theta), Phi))
-angles = np.array([cos(Theta), Phi])
-
-colorfunction=G_angles(angles, epsilon)
-
-norm = colors.Normalize()

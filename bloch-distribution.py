@@ -3,7 +3,27 @@ import matplotlib.pyplot as plt
 from matplotlib import cm, colors, gridspec
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
-from invert_angles import *
+from numpy import pi, sin, cos
+from invert_angles import G_angles
+
+# Parameters
+N = 16
+epsilon = 1
+
+Theta, Phi = np.mgrid[0:pi/2:complex(0, N), 0:2*pi:complex(0, 2*N + 1)]
+# Theta should be in the open interval (0, pi/2)
+Theta = Theta[1:-1,:]
+Phi = Phi[1:-1,:]
+
+X = sin(Theta) * cos(Phi)
+Y = sin(Theta) * sin(Phi)
+Z = cos(Theta)
+
+angles = np.array([cos(Theta), Phi])
+
+colorfunction=G_angles(angles, epsilon)
+
+norm = colors.Normalize()
 
 cmap = cm.hot
 
@@ -15,6 +35,7 @@ fig.suptitle(r'$\epsilon=' + str(epsilon) + '$', fontsize=fontsize)
 ax1 = plt.subplot(gs[0], projection='polar')
 ax1.pcolormesh(Phi, Theta, colorfunction, cmap=cmap, norm=norm,
                shading='gouraud')
+ax1.set_ylim(0, Theta[-1,-1])
 
 ax2 = plt.subplot(gs[1], projection='3d')
 surf = ax2.plot_surface(X, Y, Z,  rstride=1, cstride=1,
