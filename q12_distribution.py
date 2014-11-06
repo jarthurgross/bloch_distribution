@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm, colors
 import numpy as np
 from invert_angles import G_q12
+from my_cms import husl_hot
 
 # Parameters
 epsilon = 0.575
@@ -21,7 +22,7 @@ G = G_q12(Q1, Q2, epsilon)
 
 norm = colors.Normalize()
 
-cmap = cm.hot
+cmap = husl_hot
 
 fontsize = 20
 fig = plt.figure()
@@ -36,4 +37,4 @@ ax.set_ylabel(r'$q_2$', fontsize=fontsize)
 m = cm.ScalarMappable(cmap=cmap, norm=norm)
 m.set_array(G)
 plt.colorbar(m)
-plt.savefig('plots/q12_e' + str(epsilon) + '.png')
+plt.savefig('plots/husl_hot_q12_e' + str(epsilon) + '.png')
