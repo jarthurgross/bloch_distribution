@@ -20,6 +20,19 @@ def map_qpm_to_sphere(qs, epsilon):
     return np.array([cos_theta, phi])
 
 
+def map_q12_to_sphere(qs, epsilon):
+    """Takes values for q1 and q2 and maps them to the surface of the bloch
+    sphere.
+
+    """
+    cos_theta = 2/(cosh(epsilon*(qs[0] + qs[1])) + 
+                   cosh(epsilon*(qs[0] - qs[1])))
+    phi = atan2(sinh(epsilon*qs[1]),
+                (sinh(epsilon*(qs[0] + qs[1])) +
+                 sinh(epsilon*(qs[0] - qs[1])))/2)
+    return np.array([cos_theta, phi])
+
+
 # angles = np.array([cos(Theta), Phi])
 def guess_qpm_vals(angles, epsilon):
     """Generates an initial guess of qp and qm for the rootfinder.
