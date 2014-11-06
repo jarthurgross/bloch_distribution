@@ -1,3 +1,4 @@
+my_cms.py
 *.png
 *.swp
 __pycache__/*
