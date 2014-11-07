@@ -10,9 +10,10 @@ from mpl_toolkits.mplot3d import Axes3D
 atan2 = arctan2
 
 
-def map_qpm_to_sphere(qs, epsilon):
-    """Takes values for qp and qm and maps them to the surface of the bloch
-    sphere.
+def map_qpm_to_sphere_y(qs, epsilon):
+    """Takes values for qp and qm and maps them to points on the surface of the
+    Bloch sphere given as pairs (cos theta, phi) for spherical coordinates
+    around the y-axis with phi starting on the z-axis.
 
     """
     cos_theta = 2/(cosh(2*epsilon*qs[0]) + cosh(2*epsilon*qs[1]))
@@ -21,9 +22,10 @@ def map_qpm_to_sphere(qs, epsilon):
     return np.array([cos_theta, phi])
 
 
-def map_q12_to_sphere(qs, epsilon):
-    """Takes values for q1 and q2 and maps them to the surface of the bloch
-    sphere.
+def map_q12_to_sphere_y(qs, epsilon):
+    """Takes values for q1 and q2 and maps them to points on the surface of the
+    Bloch sphere given as pairs (cos theta, phi) for spherical coordinates
+    around the y-axis with phi starting on the z-axis.
 
     """
     cos_theta = 2/(cosh(epsilon*(qs[0] + qs[1])) + 
@@ -31,6 +33,21 @@ def map_q12_to_sphere(qs, epsilon):
     phi = atan2(sinh(epsilon*qs[1]),
                 (sinh(epsilon*(qs[0] + qs[1])) +
                  sinh(epsilon*(qs[0] - qs[1])))/2)
+    return np.array([cos_theta, phi])
+
+
+def map_q12_to_sphere_z(qs, epsilon):
+    """Takes values for q1 and q2 and maps them to points on the surface of the
+    Bloch sphere given as pairs (cos theta, phi) for spherical coordinates
+    around the z-axis with phi starting on the x-axis (i.e. the standard
+    arrangement).
+
+    """
+    cos_theta = ((sinh(epsilon*(qs[0] + qs[1])) +
+                  sinh(epsilon*(qs[0] - qs[1])))/
+                 (cosh(epsilon*(qs[0] + qs[1])) + 
+                  cosh(epsilon*(qs[0] - qs[1]))))
+    phi = atan2(2, sinh(epsilon*qs[1]))
     return np.array([cos_theta, phi])
 
 
@@ -71,7 +88,7 @@ def array_get_qpm_vals(angles, epsilon):
                 inverted[:,m,n] = np.array([0, 0])
             else:
                 try:
-                    sol = root(lambda qs: map_qpm_to_sphere(qs, epsilon) -
+                    sol = root(lambda qs: map_qpm_to_sphere_y(qs, epsilon) -
                                 np.array([costheta[m,n], phi[m,n]]),
                                 guess_qpm_vals(np.array([costheta[m,n],
                                 phi[m,n]]), epsilon))
