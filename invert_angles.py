@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+from __future__ import division
 from scipy.optimize import root
 import numpy as np
 from numpy import cosh, arccosh, sinh, arctan2, cos, sin, exp, pi
