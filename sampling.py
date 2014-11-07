@@ -1,10 +1,10 @@
 #!/usr/bin/python
-from numpy import sqrt, cosh, exp, pi
+from numpy import sqrt, cosh, exp, pi, arccos, cos, sin
 import numpy as np
 from scipy.special import erf
 from itertools import product
 from BTrees.OOBTree import OOBTree
-from invert_angles import map_q12_to_sphere
+from invert_angles import map_q12_to_sphere_z
 
 def rp(q_range, epsilon):
     return (erf(sqrt(epsilon/2)*(q_range[1] - 1)) -
@@ -80,19 +80,24 @@ def get_state_samples(min_q, max_q, lin_samps, epsilon, dist_samps):
     samples returned as normalized vectors in C^2 (represented in the
     computational z basis).
 
-    :param min_q:   The minimum value of q1 and q2 to sample from
-    :param max_q:   The maximum value of q1 and q2 to sample from
+    :param min_q:       The minimum value of q1 and q2 to sample from
+    :param max_q:       The maximum value of q1 and q2 to sample from
     :param lin_samps:   The number of bin edges in each direction (one more
                         than the number of bins in each direction)
-    :param epsilon: The strength of the weak measurement
+    :param epsilon:     The strength of the weak measurement
     :param dist_samps:  The number of times to sample from the distribution
+    :returns:           numpy.array with shape (2,dist_samps) with the first row
+                        containing the |0> coefficients and the second row
+                        containingthe |1> coefficients
+
     """
 
     tree = build_tree(min_q, max_q, lin_samps, epsilon)
     samples = get_samples(dist_samps, tree)
-    angles = map_q12_to_sphere(np.array(zip(*samples)), epsilon)
-    # First represent +y as [1, 0] and -y as [0, 1], then perform unitary to
-    # take [1, 0] to [1, i] and [0, 1] to [1, -i].
+    angles = map_q12_to_sphere_z(np.array(zip(*samples)), epsilon)
+    Theta = arccos(angles[0])
+    Phase = exp(1.j*angles[1])
+    return np.array([cos(Theta/2), sin(Theta/2)*Phase])
 
 
 # TODO: Figure out why calling linspace makes python think sampler needs an
