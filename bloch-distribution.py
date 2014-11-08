@@ -4,7 +4,7 @@ from matplotlib import cm, colors, gridspec
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 from numpy import pi, sin, cos
-from invert_angles import G_angles
+from invert_angles import G_angles_qpm
 
 # Parameters
 N = 16
@@ -21,7 +21,7 @@ Z = cos(Theta)
 
 angles = np.array([cos(Theta), Phi])
 
-colorfunction=G_angles(angles, epsilon)
+colorfunction=G_angles_qpm(angles, epsilon)
 
 norm = colors.Normalize()
 

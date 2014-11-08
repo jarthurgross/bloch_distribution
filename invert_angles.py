@@ -151,7 +151,7 @@ def parallelogram_area_q12(q1, q2, epsilon):
     return np.abs(dcostheta[0]*dphi[1] - dcostheta[1]*dphi[0])
 
 
-def G_angles(angles, epsilon):
+def G_angles_qpm(angles, epsilon):
     """The probability density function on the upper hemisphere of the bloch
     sphere.
 
