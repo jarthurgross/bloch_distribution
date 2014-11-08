@@ -119,7 +119,7 @@ def G_q12(q1, q2, epsilon):
         + q2)) + cosh(epsilon*(q1 - q2))))
 
 
-def parallelogram_area(qp, qm, epsilon):
+def parallelogram_area_qpm(qp, qm, epsilon):
     """Calculate the area of dOmega in units of dqp*dqm.
 
     """
@@ -132,6 +132,23 @@ def parallelogram_area(qp, qm, epsilon):
     c_mm = cosh(2*epsilon*qm)
     return (np.abs((s_pp + s_mm)**2*c_mp + 2*(s_pp - s_mm)*s_mp*c_pp) /
             ((c_pp + c_mm)**2*(4*s_pm**2 + s_mp**2 + s_pp**2 + s_mm**2)))
+
+
+def parallelogram_area_q12(q1, q2, epsilon):
+    """Calculate the area of dOmega in units of dq1*dq2
+
+    """
+    cp = cosh(epsilon*(q1 + q2))
+    cm = cosh(epsilon*(q1 - q2))
+    c2 = cosh(epsilon*q2)
+    sp = sinh(epsilon*(q1 + q2))
+    sm = sinh(epsilon*(q1 - q2))
+    s2 = sinh(epsilon*q2)
+
+    dcostheta = (2*epsilon/(cp + cm)**2)*np.array([sp + sm, sp - sm])
+    dphi = ((2*epsilon/((sp + sm)**2 + 4*s2**2)) *
+            np.array([-s2*(cp + cm), c2*(sp + sm) - s2*(cp - cm)]))
+    return np.abs(dcostheta[0]*dphi[1] - dcostheta[1]*dphi[0])
 
 
 def G_angles(angles, epsilon):

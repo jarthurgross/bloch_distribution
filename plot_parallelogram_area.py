@@ -2,11 +2,11 @@
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors
 import numpy as np
-from invert_angles import parallelogram_area
+from invert_angles import parallelogram_area_qpm
 from my_cms import husl_hot
 
 # Parameters
-epsilon = 0.575
+epsilon = 0.05
 qp_min = -4
 qp_max = 4
 qp_samples = 512
@@ -18,8 +18,8 @@ Qp = np.linspace(qp_min, qp_max, qp_samples)
 Qm = np.linspace(qm_min, qm_max, qm_samples)
 Qp, Qm = np.meshgrid(Qp, Qm)
 
-Area = parallelogram_area(Qp, Qm, epsilon)
-Area_symmetry = Area - parallelogram_area(Qm, Qp, epsilon)
+Area = parallelogram_area_qpm(Qp, Qm, epsilon)
+Area_symmetry = Area - parallelogram_area_qpm(Qm, Qp, epsilon)
 
 norm0 = colors.Normalize()
 norm1 = colors.Normalize()
