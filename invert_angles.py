@@ -119,12 +119,10 @@ def G_q12(q1, q2, epsilon):
         + q2)) + cosh(epsilon*(q1 - q2))))
 
 
-def G_angles(angles, epsilon):
-    """The probability density function on the upper hemisphere of the bloch
-    sphere.
+def parallelogram_area(qp, qm, epsilon):
+    """Calculate the area of dOmega in units of dqp*dqm.
 
     """
-    qp, qm = array_get_qpm_vals(angles, epsilon)
     s_pp = sinh(2*epsilon*qp)
     s_pm = sinh(epsilon*(qp + qm))
     s_mp = sinh(epsilon*(qp - qm))
@@ -132,8 +130,14 @@ def G_angles(angles, epsilon):
     c_pp = cosh(2*epsilon*qp)
     c_mp = cosh(epsilon*(qp - qm))
     c_mm = cosh(2*epsilon*qm)
-    parallelogram_area = (np.abs((s_pp + s_mm)**2*c_mp +
-                          2*(s_pp - s_mm)*s_mp*c_pp) /
-                          ((c_pp + c_mm)**2*(4*s_pm**2 + s_mp**2 +
-                                             s_pp**2 + s_mm**2)))
-    return G_qpm(qp, qm, epsilon)/parallelogram_area
+    return (np.abs((s_pp + s_mm)**2*c_mp + 2*(s_pp - s_mm)*s_mp*c_pp) /
+            ((c_pp + c_mm)**2*(4*s_pm**2 + s_mp**2 + s_pp**2 + s_mm**2)))
+
+
+def G_angles(angles, epsilon):
+    """The probability density function on the upper hemisphere of the bloch
+    sphere.
+
+    """
+    qp, qm = array_get_qpm_vals(angles, epsilon)
+    return G_qpm(qp, qm, epsilon)/parallelogram_area(qp, qm, epsilon)
