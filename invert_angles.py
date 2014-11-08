@@ -121,6 +121,7 @@ def G_q12(q1, q2, epsilon):
 
 def parallelogram_area_qpm(qp, qm, epsilon):
     """Calculate the area of dOmega in units of dqp*dqm.
+    WARNING: This function is currently giving incorrect results. DO NOT USE.
 
     """
     s_pp = sinh(2*epsilon*qp)
@@ -154,6 +155,9 @@ def parallelogram_area_q12(q1, q2, epsilon):
 def G_angles_qpm(angles, epsilon):
     """The probability density function on the upper hemisphere of the bloch
     sphere.
+
+    WARNING: Depends on parallelogram_area_qpm, which is currently giving
+    incorrect results. DO NOT USE
 
     """
     qp, qm = array_get_qpm_vals(angles, epsilon)
