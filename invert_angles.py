@@ -64,6 +64,18 @@ def guess_qpm_vals(angles, epsilon):
 
 
 # angles = np.array([cos(Theta), Phi])
+def guess_q12_vals(angles, epsilon):
+    """Generates an initial guess of qp and qm for the rootfinder.
+
+    """
+    return np.where(angles[0] == 1, np.zeros(angles.shape),
+                    np.array([
+                    cos(angles[1])*arccosh(1/angles[0])/epsilon,
+                    sin(angles[1])*arccosh(1/angles[0])/epsilon
+                    ]))
+
+
+# angles = np.array([cos(Theta), Phi])
 def array_get_qpm_vals(angles, epsilon):
     """Takes points on the upper hemisphere of the bloch sphere and maps them to
     points on the qp qm plane.
@@ -91,6 +103,43 @@ def array_get_qpm_vals(angles, epsilon):
                     sol = root(lambda qs: map_qpm_to_sphere_y(qs, epsilon) -
                                 np.array([costheta[m,n], phi[m,n]]),
                                 guess_qpm_vals(np.array([costheta[m,n],
+                                phi[m,n]]), epsilon))
+                    inverted[:,m,n] = sign[m,n]*sol.x
+                except Exception as e:
+                    print('cos(theta) = ' + str(costheta[m,n]) +
+                          ', phi = ' + str(phi[m,n]) + ', sign = ' +
+                          str(sign[m,n]) + '\n' + str(e))
+
+    return inverted
+                
+
+def array_get_q12_vals(angles, epsilon):
+    """Takes points on the upper hemisphere of the bloch sphere and maps them to
+    points on the q1 q2 plane.
+
+    """
+    costheta = np.array(angles[0])
+    phi = np.array(angles[1])
+    # Put phi in the range [-pi/2, 3pi/2).
+    phi = (phi + pi/2)%(2*pi) - pi/2
+    # If phi in range [pi/2, 3pi/2), solve for qs using phi - pi and negate the
+    # q values obtained.
+    sign = np.where(phi > pi/2, -1, 1)
+    phi = np.where(phi > pi/2, phi - pi, phi)
+    # Currently solving for values individually, but when passed an array of
+    # of angle values it won't converge (I think the rootfinder thinks it has
+    # to solve for all the roots simultaneously as a large system of
+    # equations).
+    inverted = np.zeros(np.array(angles).shape)
+    for m in range(angles.shape[1]):
+        for n in range(angles.shape[2]):
+            if costheta[m,n] == 1:
+                inverted[:,m,n] = np.array([0, 0])
+            else:
+                try:
+                    sol = root(lambda qs: map_q12_to_sphere_y(qs, epsilon) -
+                                np.array([costheta[m,n], phi[m,n]]),
+                                guess_q12_vals(np.array([costheta[m,n],
                                 phi[m,n]]), epsilon))
                     inverted[:,m,n] = sign[m,n]*sol.x
                 except Exception as e:
@@ -161,4 +210,13 @@ def G_angles_qpm(angles, epsilon):
 
     """
     qp, qm = array_get_qpm_vals(angles, epsilon)
-    return G_qpm(qp, qm, epsilon)/parallelogram_area(qp, qm, epsilon)
+    return G_qpm(qp, qm, epsilon)/parallelogram_area_qpm(qp, qm, epsilon)
+
+
+def G_angles_q12(angles, epsilon):
+    """The probability density function on the upper hemisphere of the bloch
+    sphere.
+
+    """
+    q1, q2 = array_get_q12_vals(angles, epsilon)
+    return G_q12(q1, q2, epsilon)/parallelogram_area_q12(q1, q2, epsilon)
