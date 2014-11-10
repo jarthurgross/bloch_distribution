@@ -4,7 +4,7 @@ import numpy as np
 from scipy.special import erf
 from itertools import product
 from BTrees.OOBTree import OOBTree
-from invert_angles import map_q12_to_sphere_z
+from .invert_angles import map_q12_to_sphere_z
 
 def rp(q_range, epsilon):
     return (erf(sqrt(epsilon/2)*(q_range[1] - 1)) -
@@ -94,7 +94,7 @@ def get_state_samples(min_q, max_q, lin_samps, epsilon, dist_samps):
 
     tree = build_tree(min_q, max_q, lin_samps, epsilon)
     samples = get_samples(dist_samps, tree)
-    angles = map_q12_to_sphere_z(np.array(zip(*samples)), epsilon)
+    angles = map_q12_to_sphere_z(np.array(list(zip(*samples))), epsilon)
     Theta = arccos(angles[0])
     Phase = exp(1.j*angles[1])
     return np.array([cos(Theta/2), sin(Theta/2)*Phase])
