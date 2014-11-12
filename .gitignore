@@ -3,3 +3,4 @@ my_cms.py
 *.swp
 *.pyc
 __pycache__/*
+plots/*
