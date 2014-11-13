@@ -1,7 +1,7 @@
 .. Explanation of the PDF inversion process
 
-PDF inversion
-=============
+PDF change of variables
+=======================
 
 The goal of this module is to numerically evaluate the probability density at a
 point on the Bloch sphere. The probability density is known analytically on

@@ -11,7 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   PDF_inversion
+   pdf_change_vars
 
 
 Indices and tables
