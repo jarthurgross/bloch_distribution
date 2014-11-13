@@ -1,6 +1,9 @@
 my_cms.py
+
 *.png
 *.swp
 *.pyc
+
 __pycache__/*
 plots/*
+_build/*
