@@ -137,6 +137,27 @@ def array_get_qpm_vals(angles, epsilon):
     return inverted
                 
 
+def q12_jac(qs, epsilon):
+    """The Jacobian of the mapping from q1, q2 to costheta, phi
+
+    """
+
+    s2 = sinh(epsilon*qs[1])
+    c2 = cosh(epsilon*qs[1])
+    sp = sinh(epsilon*(qs[0] + qs[1]))
+    sm = sinh(epsilon*(qs[0] - qs[1]))
+    cp = cosh(epsilon*(qs[0] + qs[1]))
+    cm = cosh(epsilon*(qs[0] - qs[1]))
+    csum = cp + cm
+    cdenom = csum**2
+    ssum = sp + sm
+    sdenom = ssum**2 + 4*s2**2
+
+    return -2*epsilon*np.array([[ssum/cdenom, (sp - sm)/cdenom],
+                                [s2*csum/sdenom,
+                                 (s2*(cp - cm) - c2*ssum)/sdenom]])
+
+
 def array_get_q12_vals(angles, epsilon):
     """Takes points on the upper hemisphere of the bloch sphere and maps them to
     points on the q1 q2 plane.
@@ -172,7 +193,8 @@ def array_get_q12_vals(angles, epsilon):
                     sol = root(lambda qs: map_q12_to_sphere_y(qs, epsilon) -
                                 np.array([costheta[m,n], phi[m,n]]),
                                 guess_q12_vals(np.array([costheta[m,n],
-                                phi[m,n]]), epsilon))
+                                                         phi[m,n]]), epsilon),
+                                jac=lambda qs: q12_jac(qs, epsilon))
                     inverted[:,m,n] = sign[m,n]*sol.x
                 except Exception as e:
                     print('cos(theta) = ' + str(costheta[m,n]) +
