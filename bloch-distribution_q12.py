@@ -8,8 +8,8 @@ from invert_angles import G_angles_q12
 from my_cms import husl_hot
 
 # Parameters
-N = 96
-epsilon = .575
+N = 16
+epsilon = .5
 
 Theta, Phi = np.mgrid[0:pi/2:complex(0, N), 0:2*pi:complex(0, 2*N + 1)]
 # Theta should be in the open interval (0, pi/2)
