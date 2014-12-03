@@ -55,6 +55,14 @@ def map_q12_to_sphere_z(qs, epsilon):
 def guess_qpm_vals(angles, epsilon):
     """Generates an initial guess of qp and qm for the rootfinder.
 
+    :param angles:  A 3D numpy.array, where angles[0] is a 2D array with
+                    costheta values and angles[1] is a 2D array with phi values
+    :param epsilon: A positive real number parametrizing the strength of the
+                    weak measurement.
+    :returns:       A 3D numpy.array "guess", where guess[0] is a 2D array
+                    holding the qp values and guess[1] is a 2D array holding
+                    the qm values.
+
     """
     return np.where(angles[0] == 1, np.zeros(angles.shape),
                     np.array([
@@ -66,6 +74,14 @@ def guess_qpm_vals(angles, epsilon):
 # angles = np.array([cos(Theta), Phi])
 def guess_q12_vals(angles, epsilon):
     """Generates an initial guess of qp and qm for the rootfinder.
+
+    :param angles:  A 3D numpy.array, where angles[0] is a 2D array with
+                    costheta values and angles[1] is a 2D array with phi values
+    :param epsilon: A positive real number parametrizing the strength of the
+                    weak measurement.
+    :returns:       A 3D numpy.array "guess", where guess[0] is a 2D array
+                    holding the q1 values and guess[1] is a 2D array holding
+                    the q2 values.
 
     """
     return np.where(angles[0] == 1, np.zeros(angles.shape),
@@ -79,6 +95,14 @@ def guess_q12_vals(angles, epsilon):
 def array_get_qpm_vals(angles, epsilon):
     """Takes points on the upper hemisphere of the bloch sphere and maps them to
     points on the qp qm plane.
+
+    :param angles:  A 3D numpy.array, where angles[0] is a 2D array with
+                    costheta values and angles[1] is a 2D array with phi values
+    :param epsilon: A positive real number parametrizing the strength of the
+                    weak measurement.
+    :returns:       A 3D numpy.array "inverted", where inverted[0] is a 2D
+                    array holding the qp values and inverted[1] is a 2D array
+                    holding the qm values.
 
     """
     costheta = np.array(angles[0])
@@ -116,6 +140,14 @@ def array_get_qpm_vals(angles, epsilon):
 def array_get_q12_vals(angles, epsilon):
     """Takes points on the upper hemisphere of the bloch sphere and maps them to
     points on the q1 q2 plane.
+
+    :param angles:  A 3D numpy.array, where angles[0] is a 2D array with
+                    costheta values and angles[1] is a 2D array with phi values
+    :param epsilon: A positive real number parametrizing the strength of the
+                    weak measurement.
+    :returns:       A 3D numpy.array "inverted", where inverted[0] is a 2D
+                    array holding the q1 values and inverted[1] is a 2D array
+                    holding the q2 values.
 
     """
     costheta = np.array(angles[0])
@@ -202,8 +234,15 @@ def parallelogram_area_q12(q1, q2, epsilon):
 
 
 def G_angles_qpm(angles, epsilon):
-    """The probability density function on the upper hemisphere of the bloch
+    """The probability density function on the upper hemisphere of the Bloch
     sphere.
+
+    :param angles:  A 3D numpy.array, where angles[0] is a 2D array with
+                    costheta values and angles[1] is a 2D array with phi values
+    :param epsilon: A positive real number parametrizing the strength of the
+                    weak measurement.
+    :returns:       A 2D numpy.array of probability densities on the Bloch
+                    sphere at the specified points.
 
     WARNING: Depends on parallelogram_area_qpm, which is currently giving
     incorrect results. DO NOT USE
@@ -214,8 +253,15 @@ def G_angles_qpm(angles, epsilon):
 
 
 def G_angles_q12(angles, epsilon):
-    """The probability density function on the upper hemisphere of the bloch
+    """The probability density function on the upper hemisphere of the Bloch
     sphere.
+
+    :param angles:  A 3D numpy.array, where angles[0] is a 2D array with
+                    costheta values and angles[1] is a 2D array with phi values
+    :param epsilon: A positive real number parametrizing the strength of the
+                    weak measurement.
+    :returns:       A 2D numpy.array of probability densities on the Bloch
+                    sphere at the specified points.
 
     """
     q1, q2 = array_get_q12_vals(angles, epsilon)
