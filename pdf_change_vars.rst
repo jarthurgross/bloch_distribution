@@ -96,3 +96,42 @@ We calculate the matrix elements of the Jacobian to be:
    \end{align}
 
 using the shorthand :math:`q_\pm:=q_1\pm q_2`.
+
+Limiting case
+-------------
+
+For some of our plots, we want to calculate :math:`\tilde{G}(0,\phi)`. We can
+find :math:`\Omega^{-1}(0,\phi)`, since:
+
+.. math::
+
+   \begin{align}
+   0&=\theta&\Leftrightarrow \\
+   0&=\big(\cosh(\epsilon(q_1+q_2))-1\big)+\big(\cosh(\epsilon(q_1-q_2))-1\big)
+   &\Leftrightarrow \\
+   q_1&=q_2=0
+   \end{align}
+
+We easily calculate :math:`G(0,0)=\epsilon e^{-\epsilon/2}/2\pi`. However,
+:math:`\vert\operatorname{det}(D\Omega)\vert` evaluates to the indeterminate
+form :math:`0/0` at :math:`q_1=q_2=0`. The full expression is given below:
+
+.. math::
+
+   \vert\operatorname{det}(D\Omega)\vert=4\epsilon^2\left\vert
+   \frac{2s_2(s_-c_+-s_+c_-)-(s_++s_-)^2c_2}{(c_++c_-)^2((s_++s_-)^2+4s_2^2)}
+   \right\vert
+
+where the notation uses further shorthands :math:`s_a:=\sinh(\epsilon q_a)` and
+:math:`c_a:=\cosh(\epsilon q_a)`. We can rewrite in a different (perhaps more
+suggestive) form:
+
+.. math::
+
+   \vert\operatorname{det}(D\Omega)\vert=4\epsilon^2\frac{c_2}{(c_++c_-)^2}
+   \left\vert 1-\frac{4s_2^2+2\frac{s_-c_+-s_+c_-}{c_2}s_2}
+   {4s_2^2+(s_++s_-)^2}\right\vert
+
+From this and numerical calculations, I believe
+:math:`\lim_{(q_1,q_2)\to(0,0)}=\epsilon^2`, but I haven't managed to prove it
+yet.
