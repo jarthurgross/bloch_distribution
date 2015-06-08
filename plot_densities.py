@@ -21,9 +21,11 @@ if __name__ == '__main__':
 
     data_file = h5py.File(args.data_filenames[0], 'r')
     epsilon = data_file['densities'].attrs['epsilon']
-    # The vstacks fill in the guessed limit of epsilon^2 for theta = 0
+    # The vstacks fill in the guessed limit of epsilon^3*exp(-epsilon/2)/2*pi
+    # for theta = 0
     Densities = data_file['densities'][:]
-    Densities = np.vstack((epsilon**2*np.ones(Densities.shape[1]), Densities))
+    Densities = np.vstack((epsilon**3 * np.exp(-epsilon/2) *
+                           np.ones(Densities.shape[1])/(2 * np.pi), Densities))
     R = data_file['R'][:]
     R = np.vstack((np.zeros(R.shape[1]), R))
     Phi = data_file['Phi'][:]
