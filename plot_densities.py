@@ -16,16 +16,18 @@ if __name__ == '__main__':
     parser.add_argument('data_filenames', metavar='files', nargs='+',
                         help='List of hdf5 files containing densities')
     parser.add_argument('--colormap', '-c', default='CMRmap',
-                        help='List of hdf5 files containing densities')
+                        help='String indicating colormap to use')
+    parser.add_argument('--filetype', '-f', default='pdf',
+                        help='Extension for output file')
     args = parser.parse_args()
 
     data_file = h5py.File(args.data_filenames[0], 'r')
     epsilon = data_file['densities'].attrs['epsilon']
-    # The vstacks fill in the guessed limit of epsilon^3*exp(-epsilon/2)/2*pi
-    # for theta = 0
+    # The vstacks fill in the indeterminate polar density with the average of
+    # the neighboring densities
     Densities = data_file['densities'][:]
-    Densities = np.vstack((epsilon**3 * np.exp(-epsilon/2) *
-                           np.ones(Densities.shape[1])/(2 * np.pi), Densities))
+    Densities = np.vstack((np.mean(Densities[0,:]) *
+                           np.ones(Densities.shape[1]), Densities))
     R = data_file['R'][:]
     R = np.vstack((np.zeros(R.shape[1]), R))
     Phi = data_file['Phi'][:]
@@ -72,4 +74,4 @@ if __name__ == '__main__':
 
     mpl.rcParams['savefig.dpi'] = 300
     plt.savefig('../../data/plots/bloch_densities_e' + str(epsilon) + '_' +
-                args.colormap + '.pdf', transparent=True)
+                args.colormap + '.' + args.filetype, transparent=True)
