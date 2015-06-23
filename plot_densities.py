@@ -68,13 +68,18 @@ if __name__ == '__main__':
     mpl.rcParams['axes.labelsize'] = fontsize
     mpl.rcParams['axes.titlesize'] = fontsize
 
-    norm = mpl.colors.Normalize()
+    max_densities = [np.max(Density_mesh) for Density_mesh in Density_meshes]
+    max_density = max(max_densities)
+
+    norm = mpl.colors.Normalize(vmin=0, vmax=max_density)
 
     cmap = plt.get_cmap(args.colormap)
 
-    fig = plt.figure(figsize=(2.5*(len(data_files) + 1),4))
-    gs = mpl.gridspec.GridSpec(2, len(data_files) + 1, height_ratios=[3, 2])
+    columns = len(data_files) + 1
+    fig = plt.figure(figsize=(2.5*columns,4))
+    gs = mpl.gridspec.GridSpec(2, columns, height_ratios=[6, 3])
 
+    # Plot reference 2D axis
     ax = plt.subplot(gs[0], aspect='equal', alpha=0, frame_on=False)
     ax.set_xlim([-1.25, 1.25])
     ax.set_ylim([-1.25, 1.25])
@@ -89,7 +94,8 @@ if __name__ == '__main__':
     ax.text(1, 0.55, r'$z$', fontsize=fontsize, horizontalalignment='right',
             verticalalignment='bottom', transform=ax.transAxes)
 
-    ax = plt.subplot(gs[len(data_files) + 1], projection='3d')
+    # Plot reference 3D axis
+    ax = plt.subplot(gs[columns], projection='3d')
     ax.set_zlim3d(0, 1)
     ax.w_zaxis.set_major_formatter(NullFormatter())
     ax.w_zaxis.set_major_locator(NullLocator())
@@ -99,20 +105,20 @@ if __name__ == '__main__':
     ax.set_ylim3d(-1, 1)
     ax.w_yaxis.set_major_formatter(NullFormatter())
     ax.w_yaxis.set_major_locator(NullLocator())
-    x_arrow = Arrow3D([0,0],[-1,1],[0,0], mutation_scale=20, lw=2,
+    x_arrow = Arrow3D([0,0],[-1,1],[0,0], mutation_scale=20, lw=1,
                       arrowstyle='-|>', color='k')
-    y_arrow = Arrow3D([0,0],[0,0],[0,1], mutation_scale=20, lw=2,
+    y_arrow = Arrow3D([0,0],[0,0],[0,1], mutation_scale=20, lw=1,
                       arrowstyle='-|>', color='k')
-    z_arrow = Arrow3D([-1,1],[0,0],[0,0], mutation_scale=20, lw=2,
+    z_arrow = Arrow3D([-1,1],[0,0],[0,0], mutation_scale=20, lw=1,
                       arrowstyle='-|>', color='k')
     ax.add_artist(x_arrow)
     ax.add_artist(y_arrow)
     ax.add_artist(z_arrow)
-
     ax.text(0, 1, 0, r'$x$', fontsize=fontsize)
     ax.text(0.05, 0, 1, r'$y$', fontsize=fontsize)
     ax.text(1, 0, 0.05, r'$z$', fontsize=fontsize)
 
+    # Plot the distributions
     for n in range(len(data_files)):
         ax = plt.subplot(gs[n + 1], projection='polar')
         ax.pcolormesh(Phi_meshes[n], R_meshes[n], Density_meshes[n], cmap=cmap,
@@ -123,8 +129,7 @@ if __name__ == '__main__':
 
         ax.set_title(r'$\epsilon=' + str(epsilons[n]) + '$')
 
-        # Having problems with my custom colormap and facecolors.
-        ax = plt.subplot(gs[len(data_files) + 1 + n + 1], projection='3d')
+        ax = plt.subplot(gs[columns + n + 1], projection='3d')
         surf = ax.plot_surface(X_meshes[n], Y_meshes[n], Z_meshes[n],
                                rstride=1, cstride=1,
                                facecolors=cmap(norm(Density_meshes[n])),
@@ -140,6 +145,24 @@ if __name__ == '__main__':
         ax.w_yaxis.set_major_formatter(NullFormatter())
         ax.w_yaxis.set_major_locator(NullLocator())
 
+    plt.tight_layout()
+    fig.subplots_adjust(right=0.8)
+    ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+
+    # Add color bar
+    #ax = plt.subplot(gs[columns - 1])
+    cbar = mpl.colorbar.ColorbarBase(ax, cmap=cmap, norm=norm,
+                                     ticks=[0, max_density])
+
+    '''
+    cbar.get_xaxis().set_visible(False)
+    cbar.get_yaxis().set_visible(False)
+    cbar.patch.set_alpha(0)
+    cbar.set_frame_on(False)
+    plt.colorbar(m, orientation='vertical', ax=cbar)
+    '''
+
     mpl.rcParams['savefig.dpi'] = 300
-    plt.savefig('../../data/plots/bloch_densities_e' + str(epsilons[0]) + '_' +
+    epsilons_string = ''.join(['_e' + str(epsilon) for epsilon in epsilons])
+    plt.savefig('../../data/plots/bloch_densities' + epsilons_string + '_' +
                 args.colormap + '.' + args.filetype, transparent=True)
