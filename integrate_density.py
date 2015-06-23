@@ -28,7 +28,7 @@ if __name__ == '__main__':
         # rectangle rather than a hemisphere
         Scaled_density_mesh = Density_mesh*np.sin(Theta_mesh)
         Total_probs.append(np.trapz(np.trapz(Scaled_density_mesh, Phi_mesh),
-                                    Theta_mesh[:,0]))
+                           Theta_mesh[:,0]))
 
     for epsilon, prob in zip(epsilons, Total_probs):
         print(epsilon, prob)
