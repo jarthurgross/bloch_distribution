@@ -7,6 +7,15 @@ from datetime import datetime as dt
 import argparse
 from invert_angles import G_angles_q12
 
+def construct_grid(N):
+    Theta, Phi = np.mgrid[0:np.pi/2:complex(0, N),
+                          0:2*np.pi:complex(0, 4*N + 1)]
+    # Theta should be in the open interval (0, pi/2)
+    Theta = Theta[1:-1,:]
+    Phi = Phi[1:-1,:]
+
+    return Theta, Phi
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Calculate probability ' +
@@ -24,11 +33,8 @@ if __name__ == '__main__':
                           dt.utcnow().strftime('%Y%m%dT%H%M%SZ') + '.hdf5',
                           'w-')
 
-    Theta, Phi = np.mgrid[0:np.pi/2:complex(0, args.N),
-                          0:2*np.pi:complex(0, 4*args.N + 1)]
-    # Theta should be in the open interval (0, pi/2)
-    Theta = Theta[1:-1,:]
-    Phi = Phi[1:-1,:]
+    Theta, Phi = construct_grid(args.N)
+
     # Radial coordinates for a Lambert azimuthal equal-area projection
     R = 2*np.cos(pi/2 - Theta/2)
 
