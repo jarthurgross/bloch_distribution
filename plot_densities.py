@@ -114,9 +114,9 @@ if __name__ == '__main__':
     ax.add_artist(x_arrow)
     ax.add_artist(y_arrow)
     ax.add_artist(z_arrow)
-    ax.text(0, 1, 0, r'$x$', fontsize=fontsize)
-    ax.text(0.05, 0, 1, r'$y$', fontsize=fontsize)
-    ax.text(1, 0, 0.05, r'$z$', fontsize=fontsize)
+    ax.text(0, 1, 0.05, r'$x$', fontsize=fontsize)
+    ax.text(0.1, 0, 0.9, r'$y$', fontsize=fontsize)
+    ax.text(1, 0, 0.15, r'$z$', fontsize=fontsize)
 
     # Plot the distributions
     for n in range(len(data_files)):
@@ -153,6 +153,8 @@ if __name__ == '__main__':
     #ax = plt.subplot(gs[columns - 1])
     cbar = mpl.colorbar.ColorbarBase(ax, cmap=cmap, norm=norm,
                                      ticks=[0, max_density])
+    # Rasterize colorbar so pdf viewers don't introduce artefacts
+    cbar.solids.set_rasterized(True)
 
     '''
     cbar.get_xaxis().set_visible(False)
