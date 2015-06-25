@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from __future__ import division, print_function
 import numpy as np
 from numpy import pi, sin, cos
@@ -8,6 +7,13 @@ import argparse
 from invert_angles import G_angles_q12
 
 def construct_grid(N):
+    """Create a grid of theta/phi values with N samples every pi/2 radians. The
+    grid covers all phi between 0 and 2pi, but only theta between 0 and pi/2,
+    exclusive, since those endpoints are problematic for the function that
+    calculates probability densities.
+
+    """
+
     Theta, Phi = np.mgrid[0:np.pi/2:complex(0, N),
                           0:2*np.pi:complex(0, 4*N + 1)]
     # Theta should be in the open interval (0, pi/2)
@@ -26,10 +32,12 @@ if __name__ == '__main__':
                         help='Strength of the weak measurements')
     parser.add_argument('-N', type=int, default=256,
                         help='Resolution at which to calculate densities')
+    parser.add_argument('-f', '--folder', type=str, default='../../data/',
+                        help='Folder to write results to')
     args = parser.parse_args()
 
-    data_file = h5py.File('../../data/bloch_densities_e' + str(args.epsilon) +
-                          '_N' + str(args.N) + '_' +
+    data_file = h5py.File(args.folder + 'bloch_densities_e' +
+                          str(args.epsilon) + '_N' + str(args.N) + '_' +
                           dt.utcnow().strftime('%Y%m%dT%H%M%SZ') + '.hdf5',
                           'w-')
 
@@ -50,6 +58,7 @@ if __name__ == '__main__':
     dataset.attrs['epsilon'] = args.epsilon
     dataset.attrs['N'] = args.N
     data_file.create_dataset('R', data=R)
+    data_file.create_dataset('Theta', data=Theta)
     data_file.create_dataset('Phi', data=Phi)
     data_file.create_dataset('X', data=X)
     data_file.create_dataset('Y', data=Y)
