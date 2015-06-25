@@ -3,9 +3,6 @@ from __future__ import division
 from scipy.optimize import root
 import numpy as np
 from numpy import cosh, arccosh, sinh, arctan2, cos, sin, exp, pi
-import matplotlib.pyplot as plt
-from matplotlib import cm, colors
-from mpl_toolkits.mplot3d import Axes3D
 
 atan2 = arctan2
 
