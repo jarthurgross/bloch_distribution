@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from __future__ import division
 from scipy.optimize import root
 import numpy as np
@@ -211,8 +210,7 @@ def G_qpm(qp, qm, epsilon):
 
 
 def G_q12(q1, q2, epsilon):
-    """The probability density function on the q1 q2 plane. (might be improperly
-    normalized)
+    """The probability density function on the q1 q2 plane.
 
     """
     return (epsilon/(4*pi)*exp(-epsilon*(q1**2 + q2**2 + 2)/2)*(cosh(epsilon*(q1
