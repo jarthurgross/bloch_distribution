@@ -31,7 +31,7 @@ if __name__ == '__main__':
                                      'Das-Arvind.')
     parser.add_argument('data_filenames', metavar='files', nargs='+',
                         help='List of hdf5 files containing densities')
-    parser.add_argument('--colormap', '-c', default='CMRmap',
+    parser.add_argument('--colormap', '-c', default='cubehelix_r',
                         help='String indicating colormap to use')
     parser.add_argument('--filetype', '-f', default='pdf',
                         help='Extension for output file')
