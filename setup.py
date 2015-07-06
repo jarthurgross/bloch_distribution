@@ -1,7 +1,3 @@
-# In case the user doesn't have setuptools installed
-import ez_setup
-ez_setup.use_setuptools()
-
 from setuptools import setup
 
 requires = [
