@@ -9,6 +9,7 @@ requires = [
         'scipy',
         'matplotlib',
         'BTrees',
+        'h5py',
         ]
 
 setup(name='bloch_distribution',
