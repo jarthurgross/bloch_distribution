@@ -7,3 +7,6 @@ my_cms.py
 __pycache__/*
 plots/*
 _build/*
+build/*
+dist/*
+bloch_distribution.egg-info/*

@@ -2,7 +2,6 @@ from nose.tools import assert_almost_equal, assert_equal, assert_greater
 from nose.tools import assert_less_equal
 import numpy as np
 import bloch_distribution.invert_angles as inv
-import bloch_distribution.calculate_densities as den
 
 def check_inversions(Q1, Q2, epsilon):
     Qs = np.array([Q1, Q2])
@@ -12,7 +11,7 @@ def check_inversions(Q1, Q2, epsilon):
     assert_almost_equal(np.max(np.abs(diffs)), 0, 7)
 
 def check_bloch_normalization(N, epsilon):
-    Theta, Phi = den.construct_grid(N)
+    Theta, Phi = inv.construct_grid(N)
     Angles = np.array([np.cos(Theta), Phi])
     Densities = inv.G_angles_q12(Angles, epsilon)
     Scaled_densities = Densities*np.sin(Theta)

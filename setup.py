@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 requires = [
         'numpy',
@@ -10,6 +10,7 @@ requires = [
 
 setup(name='bloch_distribution',
       version='0.0',
-      py_modules=['invert_angles', 'sampling'],
-      install_requires=requires
+      # py_modules=['bloch_distribution'],
+      install_requires=requires,
+      packages=find_packages(),
      )
