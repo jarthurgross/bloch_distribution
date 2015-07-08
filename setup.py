@@ -10,7 +10,8 @@ requires = [
 
 setup(name='bloch_distribution',
       version='0.0',
-      # py_modules=['bloch_distribution'],
+      py_modules=['invert_angles', 'sampling'],
       install_requires=requires,
-      packages=find_packages(),
+      packages=['bloch_distribution'],
+      package_dir={'bloch_distribution': 'src/bloch_distribution'},
      )
