@@ -6,6 +6,7 @@ requires = [
         'matplotlib',
         'BTrees',
         'h5py',
+        'cython',
         ]
 
 setup(name='bloch_distribution',
