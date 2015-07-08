@@ -4,7 +4,7 @@ from matplotlib.ticker import MultipleLocator, FixedFormatter
 from matplotlib import cm, colors, gridspec
 import numpy as np
 from numpy import pi
-from invert_angles import map_q12_to_sphere
+from bloch_distribution.invert_angles import map_q12_to_sphere
 from my_cms import huslp
 
 # Parameters

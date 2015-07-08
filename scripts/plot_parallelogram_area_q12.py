@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors
 import numpy as np
-from invert_angles import parallelogram_area_q12
+from bloch_distribution.invert_angles import parallelogram_area_q12
 from my_cms import husl_hot
 
 # Parameters

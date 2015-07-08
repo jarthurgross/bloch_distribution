@@ -4,7 +4,7 @@ from numpy import pi, sin, cos
 import h5py
 from datetime import datetime as dt
 import argparse
-from invert_angles import G_angles_q12, construct_grid
+from bloch_distribution.invert_angles import G_angles_q12, construct_grid
 
 if __name__ == '__main__':
 

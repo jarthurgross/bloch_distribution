@@ -1,6 +1,6 @@
 #!/use/bin/python
 from __future__ import division
-from sampling import build_tree, get_samples
+from bloch_distribution.sampling import build_tree, get_samples
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors
 import numpy as np

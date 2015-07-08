@@ -5,7 +5,6 @@ from numpy import cosh, arccosh, sinh, arctan2, cos, sin, exp, pi
 
 atan2 = arctan2
 
-
 def construct_grid(N):
     """Create a grid of theta/phi values with N samples every pi/2 radians. The
     grid covers all phi between 0 and 2pi, but only theta between 0 and pi/2,
@@ -13,7 +12,6 @@ def construct_grid(N):
     calculates probability densities.
 
     """
-
     Theta, Phi = np.mgrid[0:np.pi/2:complex(0, N),
                           0:2*np.pi:complex(0, 4*N + 1)]
     # Theta should be in the open interval (0, pi/2)
