@@ -1,10 +1,9 @@
-#!/usr/bin/python
 from numpy import sqrt, cosh, exp, pi, arccos, cos, sin
 import numpy as np
 from scipy.special import erf
 from itertools import product
 from BTrees.OOBTree import OOBTree
-from .invert_angles import map_q12_to_sphere_z
+from invert_angles import map_q12_to_sphere_z
 
 def rp(q_range, epsilon):
     return (erf(sqrt(epsilon/2)*(q_range[1] - 1)) -
@@ -33,15 +32,16 @@ def prob_dens(qs, epsilon):
 
 
 def avg_bin_val(q_ranges, epsilon):
+    """Currently not working.
+
+    """
     #TODO: Implement taking the expected value in the bin
-    '''
     # Take pairs of intervals and expand into the points at corners
     corners = np.array([list(product(*bins[:,:,n])) for n in
                         range(bins.shape[2])])
     densities = G(corners, epsilon)
     norms = np.sum(densities)
     return norms
-    '''
 
 def center_bin_point(q_ranges, epsilon):
     return zip((q_ranges[0,0] + q_ranges[0,1])/2,
@@ -75,10 +75,10 @@ def get_samples(n, tree):
 
 
 def get_state_samples(min_q, max_q, lin_samps, epsilon, dist_samps):
-    """High level function that constructs all the necessary objects for
+    r"""High level function that constructs all the necessary objects for
     sampling from the appropriate distribution and then does the sampling, with
-    samples returned as normalized vectors in C^2 (represented in the
-    computational z basis).
+    samples returned as normalized vectors in :math:`\mathbb{C}^2` (represented
+    in the computational z basis).
 
     :param min_q:       The minimum value of q1 and q2 to sample from
     :param max_q:       The maximum value of q1 and q2 to sample from
@@ -87,8 +87,8 @@ def get_state_samples(min_q, max_q, lin_samps, epsilon, dist_samps):
     :param epsilon:     The strength of the weak measurement
     :param dist_samps:  The number of times to sample from the distribution
     :returns:           numpy.array with shape (2,dist_samps) with the first row
-                        containing the |0> coefficients and the second row
-                        containingthe |1> coefficients
+                        containing the :math:`|0\rangle` coefficients and the
+                        second row containingthe :math:`|1\rangle` coefficients
 
     """
 
