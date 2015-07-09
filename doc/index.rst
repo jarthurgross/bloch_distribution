@@ -13,6 +13,7 @@ Contents:
 
    installation
    overview
+   api
    pdf_change_vars
 
 
