@@ -4,7 +4,7 @@ python:
   - "3.4"
 # command to install hdf5 library
 before_install:
-  - sudo apt-get install libhdf5-serial-dev
+  - sudo apt-get install libhdf5-serial-dev libopenblas-dev liblapack-dev
 # command to install dependencies
 install: python setup.py install
 # command to run tests
