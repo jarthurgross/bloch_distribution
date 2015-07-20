@@ -40,7 +40,7 @@ setup script:
 Once you have that installed you should be able to successfully run
 ``python setup.py install``, although I can't guarantee it. The code
 successfully builds on Travis-CI, and I only had to manually instruct it to
-install LAPACK, BLAS, and HDF5.
+install LAPACK, BLAS, a Fortran compiler, and HDF5.
 
 Issues
 ------
